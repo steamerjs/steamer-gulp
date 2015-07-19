@@ -1,0 +1,73 @@
+body{
+    background: #ff9b30 url(___cdnImg/img/index/full-bg.png?___md5) no-repeat 50% 0%;
+    background-size: contain; 
+}
+.banner{
+    width: 100%;
+    height: 259px;
+    margin: 0 auto;
+    background: url(___cdnImg/img/index/banner2.png?___md5) no-repeat 50% 0%,url(___cdnImg/img/index/banner1.png?___md5) no-repeat 50% 0%;
+    background-size: contain; 
+    position: relative;
+}
+
+.banner .qunname{
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 68%;
+    color: #531300;
+    font-size: 1.9rem;
+    text-align: center;
+}
+.minWidth .banner .qunname{
+    top: 68%;
+    font-size: 1.7rem;
+}
+.maxWidth .banner .qunname{
+    top: 68%;
+    font-size: 2.1rem;
+}
+.banner .qunname span{
+    display: inline-block;
+    vertical-align: middle;
+}
+.banner .qunname span#qunName{
+    max-width: 54%;
+    white-space: nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+}
+.banner-box{
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: url(___cdnImg/img/index/banner3.png?___md5) no-repeat 50% 0%;
+    background-size: contain; 
+}
+.con1{
+    width: 100%;
+    margin: 0 auto;
+    background: url(___cdnImg/img/index/con1.png?___md5) no-repeat 50% 0%;
+    background-size: cover;
+}
+.con1-ios{
+    width: 100%;
+    margin: 0 auto;
+    background: url(___cdnImg/img/index/con1-ios.png?___md5) no-repeat 50% 0%;
+    background-size: cover;
+}
+.con2{
+    width: 100%;
+    margin: 0 auto;
+    background: url(___cdnImg/img/index/con2.png?___md5) no-repeat 50% 0%;
+    background-size: cover;
+}
+.con3{
+    width: 100%;
+    margin: 0 auto;
+    background: url(___cdnImg/img/index/con3.png?___md5) no-repeat 50% 0%;
+    background-size: cover;
+}

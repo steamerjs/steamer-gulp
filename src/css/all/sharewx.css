@@ -1,0 +1,35 @@
+.share-wx-box{
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+}
+.share-wx-box .share-mask{
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0,0,0,0.8);
+}
+.share-wx-box .share-arrow{
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    width: 70px;
+    height: 70px;
+    background: url(___cdnImg/img/share-arrow.png) no-repeat right top;
+    background-size: 70px auto;
+    -webkit-transform: rotate(-20deg);
+}
+.share-wx-box .share-tip{
+    position: absolute;
+    right: 29px;
+    top: 88px;
+    text-align: center;
+    font-size: 1.6rem;
+    color: #fff;
+    opacity: .8;
+}

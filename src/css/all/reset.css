@@ -1,0 +1,83 @@
+@charset "UTF-8";
+/*
+Copyright 2014, TX
+by Jin
+build: 2014-06-24
+*/
+
+/*html5*/
+header,footer,section,aside,article,nav,dialog,figure{display:block;}
+/*reset*/
+*{margin:0;padding:0;}
+img{border:0;/*max-width:100%;*/}
+a{text-decoration:none;}
+a:hover{text-decoration:none;}
+em{font-style:normal;}
+ul,ol,li{list-style:none;}
+input,textarea{/*-webkit-box-shadow:none;-webkit-border-radius:0;-webkit-appearance:none;*/}
+input:focus,textarea:focus{outline:none;}
+table{border-collapse:collapse;border-spacing:0;}
+/*clear*/
+.clearfix:after{content:" ";height:0;visibility:hidden;display:block;clear:both;}
+/*公共*/
+html{font-size:62.5%;/*10 ÷ 16 × 100% = 62.5%*/}
+html,body{height:100%;width:100%;-webkit-user-select:none;user-select:none;}
+body{
+        font-family:STHeiti,Helvetica,Arial;line-height:1.5;font-size:1.4rem;
+        font-family:-apple-system-font,"Helvetica Neue",Helvetica,STHeiTi,sans-serif;
+}
+a,img{-webkit-touch-callout:none;/* 禁止长按链接与图片弹出菜单 */}
+
+/*// html,body {
+//     -webkit-touch-callout:none;
+//     -webkit-user-select:none;
+//     -webkit-user-drag:none;
+//     min-height:100%;
+//     -webkit-flex:1;
+//     flex:1;
+//     display:-webkit-flex;
+//     display:flex;
+//     -webkit-flex-direction:column;
+//     flex-direction:column;
+//     overflow:hidden;
+// }*/
+html.overhidden,html.overhidden body{
+    overflow: hidden;
+}
+a,img,input,textarea,button{
+    -webkit-touch-callout:none;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+    border-radius:0;
+    -webkit-border-radius:0;
+    outline:none;
+    /*&:active,&:focus{
+        outline:none;
+        -webkit-tap-highlight-color:rgba(0,0,0,0);
+    }*/
+}
+.nohighlight {
+    -webkit-touch-callout:none;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+/*html,body{
+    height: 100%;
+}*/
+.OpenByQQ{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: #E8E8E8;
+}
+.OpenByQQ span{
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    color: #000;
+    left: 0;
+    top: 40%;
+}
