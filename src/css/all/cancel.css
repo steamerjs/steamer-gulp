@@ -46,7 +46,7 @@ body.cancel{
 .encourage{
     width: 90%;
     margin: 0 auto;
-    background: url(___cdn/img/cancel/encourage.png?___md5) no-repeat 50% 0%;
+    background: url(___cdn/img/cancel/encourage.png) no-repeat 50% 0%;
     background-size: cover;
     margin-bottom: 15%;
 }
@@ -83,26 +83,26 @@ body.cancel{
     width: 100%;
     margin: 0 auto;
     margin-top: -110px;
-    background: url(___cdnImg/img/cancel/con1.png?___md5) no-repeat 50% 0%;
+    background: url(___cdnImg/img/cancel/con1.png) no-repeat 50% 0%;
     background-size: cover;
 }
 .cancel-con1-ios{
     width: 100%;
     margin: 0 auto;
     margin-top: -110px;
-    background: url(___cdnImg/img/cancel/con1-ios.png?___md5) no-repeat 50% 0%;
+    background: url(___cdnImg/img/cancel/con1-ios.png) no-repeat 50% 0%;
     background-size: cover;
 }
 .cancel-con2{
     width: 100%;
     margin: 0 auto;
-    background: url(___cdnImg/img/cancel/con2.png?___md5) no-repeat 50% 0%;
+    background: url(___cdnImg/img/cancel/con2.png) no-repeat 50% 0%;
     background-size: cover;
 }
 .cancel-con3{
     width: 100%;
     margin: 0 auto;
-    background: url(___cdnImg/img/cancel/con3.png?___md5) no-repeat 50% 0%;
+    background: url(___cdnImg/img/cancel/con3.png) no-repeat 50% 0%;
     background-size: cover;
 }
 
@@ -111,7 +111,7 @@ body.cancel{
     left: 0;
     top: 0;
     width: 100%;
-    background: url(___cdnImg/img/cancel/ornament.png?___md5) no-repeat 50% 0%;
+    background: url(___cdnImg/img/cancel/ornament.png) no-repeat 50% 0%;
     background-size: contain;
 }
 .minWidth .ornament{

@@ -21,6 +21,8 @@ var run = require('run-sequence');
 
 var replace = require('gulp-replace');
 
+var concat = require('gulp-concat');
+
 var clean = require('gulp-clean');
 
 var merge = require('merge-stream');
@@ -28,6 +30,8 @@ var merge = require('merge-stream');
 var gulpif = require('gulp-if');
 
 var config = require('./steamer.js');
+
+var path = require('path');
 
 // 代码中使用：___cdn 替换cdn路径
 var urlCdn = config.cdn;
@@ -37,47 +41,116 @@ var urlWeb = config.root;
 // 时间戳
 var timeline = new Date().getTime();
 
+
+var filePath = {
+	src: './src/',
+	dev: './dev/',
+	dist: './dist/'
+};
+
+var typePath = {
+	css: 'css/',
+	js: 'js/',
+	img: 'img/',
+	lib: 'lib/'
+};
+
+var pathFix = function(path) {
+	return path.replace(/\\/g, '/');
+};
+
+
 // 清理dev文件夹
 gulp.task('clean-dev', function() {
-    return gulp.src(['./dev/'], {read: false})
+    return gulp.src([filePath.dev], {read: false})
                .pipe(clean());
 });
 
 gulp.task('clone-lib', function() {
-	return gulp.src(['./src/lib/**/*'])
-		       .pipe(gulp.dest('./dev/lib/'));
+	return gulp.src([filePath.src + typePath.lib + '**/*'])
+		       .pipe(gulp.dest(filePath.dev + typePath.lib));
 });
 
 gulp.task('clone-img', function() {
-	return gulp.src(['./src/img/**/*'])
-			   .pipe(gulp.dest('./dev/img/'));
+	return gulp.src([filePath.src + typePath.img + '**/*'])
+			   .pipe(gulp.dest(filePath.dev + typePath.img));
 });
 
 gulp.task('clone-html', function() {
-	return gulp.src(['./src/*.html'])
+	return gulp.src([filePath.src + '*.html'])
 	           .pipe(replace(/\_\_\_(cdnCss)/g, urlCdn.css))
         	   .pipe(replace(/\_\_\_(cdnJs)/g, urlCdn.js))
         	   .pipe(replace(/\_\_\_(cdnImg)/g, urlCdn.img))
         	   .pipe(replace(/\_\_\_(cdn)/g, urlCdn.default))
         	   .pipe(replace(/\_\_\_(web)/g, urlWeb))
         	   .pipe(replace(/\_\_\_(timeline)/g, timeline))
-			   .pipe(gulp.dest('./dev/'));
+			   .pipe(gulp.dest(filePath.dev));
 });
 
 gulp.task('clone-css', function() {
-	return gulp.src(['./src/css/**/*'])
+	return gulp.src([filePath.src + typePath.css + '*.css'])
+				.pipe(replace(/@import url\('(.+?\.css)'\);*/ig, function(a,b){
+		            if (fs.existsSync(b)) {
+		                return fs.readFileSync(b);
+		            }
+		        }))
 	           .pipe(replace(/\_\_\_(cdnImg)/g, urlCdn.img))
-			   .pipe(gulp.dest('./dev/css/'));
+		       .pipe(replace(/\_\_\_(web)/g, urlWeb))
+		       .pipe(replace(/\_\_\_(timeline)/g, timeline))
+			   .pipe(gulp.dest(filePath.dev + typePath.css));
+});
+
+var walk = function(folder, callback, depth) {
+	var files = fs.readdirSync(folder);
+    var res = [];
+    var folderPath = pathFix(folder);
+    folder = folderPath.split('/');
+    folder = folder[folder.length - 2];
+
+    files.forEach(function(file){
+
+        var pathName = path.join(folderPath, file);
+        
+        // 同步获取文件信息
+        var stat = fs.statSync(pathName)
+        if(stat.isDirectory()) {
+            // 迭代目录
+            // console.log(pathName);
+            walk(pathName + '/', callback, depth + 1);
+        } else {
+            res.push(folderPath + file);
+        }
+    });
+
+    // console.log(res, folder);
+    (depth > 0) && callback(folder, res);
+};
+
+gulp.task('combine-css', function() {
+	walk('./src/css/', function(filename, res) {
+		// console.log(filename);
+        return  gulp.src(res)   
+			        .pipe(concat(filename + '.css'))
+			        .pipe(gulp.dest(filePath.dev + typePath.css));
+    }, 0);
 });
 
 gulp.task('clone-js', function() {
-	return gulp.src(['./src/js/**/*'])
+	return gulp.src([filePath.src + typePath.js + '*.js'])
 	           .pipe(replace(/\_\_\_(cdnJs)/g, urlCdn.js))
-			   .pipe(gulp.dest('./dev/js/'));
+			   .pipe(gulp.dest(filePath.dev + typePath.js));
+});
+
+gulp.task('combine-js', function() {
+	walk('./src/js/', function(filename, res) {
+        return  gulp.src(res)   
+			        .pipe(concat(filename + '.js'))
+			        .pipe(gulp.dest(filePath.dev + typePath.js));
+    });
 });
 
 gulp.task('dev', function() {
-    run('clone-lib', 'clone-img', 'clone-html', 'clone-css', 'clone-js');
+    run('clone-lib', 'combine-css', 'combine-js', 'clone-img', 'clone-html', 'clone-css', 'clone-js');
 });
 
 gulp.task('default', ['clean-dev'], function() {
@@ -91,12 +164,20 @@ gulp.task('default', ['clean-dev'], function() {
 // dist ↓
 // 清理dist文件夹
 gulp.task('clean-dist', function() {
-    return gulp.src(['./dist/'], {read: false})
+    return gulp.src([filePath.dist], {read: false})
                .pipe(clean());
 });
 
 gulp.task('minify-css', function() {
-    return gulp.src(['./dev/css/**/*'])
+    return gulp.src(['rev/img/*.json', './dev/css/**/*'])
+    			.pipe(revCollector({
+		            replaceReved: true,
+		            dirReplacements: {
+		                'css/': 'css/',
+		                'js/': 'js/',
+		                'img/': 'img/',
+		            }
+		        }))
 	           .pipe(minifycss())
 	           .pipe(rev())
 			   .pipe(gulp.dest('./dist/css/'))
@@ -141,18 +222,18 @@ gulp.task('md5-js', function() {
 });
 
 gulp.task('minify-img', function() {
-    var stream1 = gulp.src(['./dev/img/**/*'])
-    				  // .pipe(imagemin())
-    				  .pipe(gulp.dest('./dist/img/'));
+    // var stream1 = gulp.src(['./dev/img/**/*'])
+    // 				  // .pipe(imagemin())
+    // 				  .pipe(gulp.dest('./dist/img/'));
 
-    var stream2 = gulp.src(['./dev/img/*'])
+    return gulp.src(['./dev/img/**/*'])
 			          // .pipe(imagemin())
 			          .pipe(rev())
 					  .pipe(gulp.dest('./dist/img/'))
 					  .pipe(rev.manifest())
 		        	  .pipe(gulp.dest('rev/img'));
 
-    return merge(stream1, stream2);
+    // return merge(stream1, stream2);
 });
 
 gulp.task('minify-html', function() {
