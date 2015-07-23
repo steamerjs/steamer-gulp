@@ -47,27 +47,3 @@ body{
     background: url(___cdnImg/img/index/banner3.png) no-repeat 50% 0%;
     background-size: contain; 
 }
-.con1{
-    width: 100%;
-    margin: 0 auto;
-    background: url(___cdnImg/img/index/con1.png) no-repeat 50% 0%;
-    background-size: cover;
-}
-.con1-ios{
-    width: 100%;
-    margin: 0 auto;
-    background: url(___cdnImg/img/index/con1-ios.png) no-repeat 50% 0%;
-    background-size: cover;
-}
-.con2{
-    width: 100%;
-    margin: 0 auto;
-    background: url(___cdnImg/img/index/con2.png) no-repeat 50% 0%;
-    background-size: cover;
-}
-.con3{
-    width: 100%;
-    margin: 0 auto;
-    background: url(___cdnImg/img/index/con3.png) no-repeat 50% 0%;
-    background-size: cover;
-}

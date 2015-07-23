@@ -25,7 +25,8 @@
     "gulp-replace": "^0.5.3",
     "merge-stream": "^0.1.8",
     "gulp-if": "^1.2.5",
-    "gulp-concat": "^2.6.0"
+    "gulp-concat": "^2.6.0",
+    "gulp-css-spriter": "^0.3.0"
   },
   "engines": {
     "node": ">=0.12.0",

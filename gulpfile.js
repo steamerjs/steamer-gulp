@@ -33,6 +33,8 @@ var config = require('./steamer.js');
 
 var path = require('path');
 
+var spriter = require('gulp-css-spriter');
+
 // 代码中使用：___cdn 替换cdn路径
 var urlCdn = config.cdn;
 
@@ -129,6 +131,14 @@ gulp.task('combine-css', function() {
 	walk('./src/css/', function(filename, res) {
         return  gulp.src(res)   
 			        .pipe(concat(filename + '.css'))
+                    .pipe(replace(/@import url\('(.+?\.css)'\);*/ig, function(a,b){
+                        if (fs.existsSync(b)) {
+                            return fs.readFileSync(b);
+                        }
+                    }))
+                    .pipe(replace(/\_\_\_(cdnImg)/g, urlCdn.img))
+                    .pipe(replace(/\_\_\_(web)/g, urlWeb))
+                    .pipe(replace(/\_\_\_(timeline)/g, timeline))
 			        .pipe(gulp.dest(filePath.dev + typePath.css));
     }, 0);
 });
@@ -159,8 +169,22 @@ gulp.task('clone-tpl', function() {
 			   .pipe(gulp.dest(filePath.dev + typePath.tpl));
 });
 
+gulp.task('sprites', function() {
+    return gulp.src('./src/css/*.css')
+               .pipe(replace(urlCdn.img, '..'))
+               .pipe(spriter({
+                    // The path and file name of where we will save the sprite sheet
+                    'spriteSheet': './dev/img/sprite.png',
+                    // Because we don't know where you will end up saving the CSS file at this point in the pipe,
+                    // we need a litle help identifying where it will be.
+                    'pathToSpriteSheetFromCSS': '___cdnImg/img/sprite.png'
+                }))
+               .pipe(replace(/\_\_\_(cdnImg)/g, urlCdn.img))
+               .pipe(gulp.dest('./dev/css'));
+});
+
 gulp.task('dev', function() {
-    run('clone-lib', 'combine-css', 'combine-js', 'clone-img', 'clone-html', 'clone-css', 'clone-js', 'clone-tpl');
+    run('clone-lib', 'combine-css', 'combine-js', 'clone-img', 'clone-html', 'clone-css', 'clone-js', 'clone-tpl', 'sprites');
 });
 
 gulp.task('default', ['clean-dev'], function() {

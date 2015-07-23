@@ -1,0 +1,24 @@
+.con1{
+    width: 100%;
+    margin: 0 auto;
+    background: url(../img/sprite/index/con1.png) no-repeat 50% 0%;
+    background-size: cover;
+}
+.con1-ios{
+    width: 100%;
+    margin: 0 auto;
+    background: url(../img/sprite/index/con1-ios.png) no-repeat 50% 0%;
+    background-size: cover;
+}
+.con2{
+    width: 100%;
+    margin: 0 auto;
+    background: url(___cdnImg/img/sprite/index/con2.png) no-repeat 50% 0%;
+    background-size: cover;
+}
+.con3{
+    width: 100%;
+    margin: 0 auto;
+    background: url(___cdnImg/img/sprite/index/con3.png) no-repeat 50% 0%;
+    background-size: cover;
+}
