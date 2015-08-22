@@ -33,7 +33,11 @@ var config = require('./steamer.js');
 
 var path = require('path');
 
-var spriter = require('gulp-css-spriter');
+var spriter = require('gulp.spritesmith');
+
+var data = require('gulp-data');
+
+var fm = require('front-matter');
 
 // 代码中使用：___cdn 替换cdn路径
 var urlCdn = config.cdn;
@@ -170,21 +174,21 @@ gulp.task('clone-tpl', function() {
 });
 
 gulp.task('sprites', function() {
-    return gulp.src('./src/css/*.css')
-               .pipe(replace(urlCdn.img, '..'))
-               .pipe(spriter({
-                    // The path and file name of where we will save the sprite sheet
-                    'spriteSheet': './dev/img/sprite.png',
-                    // Because we don't know where you will end up saving the CSS file at this point in the pipe,
-                    // we need a litle help identifying where it will be.
-                    'pathToSpriteSheetFromCSS': '___cdnImg/img/sprite.png'
-                }))
-               .pipe(replace(/\_\_\_(cdnImg)/g, urlCdn.img))
-               .pipe(gulp.dest('./dev/css'));
+
+    var spriteData = gulp.src('./src/img/sprite/**/*.png').pipe(spriter({
+		imgName: 'sprite.png',
+	    cssName: 'sprite.css'
+	}));
+	
+	var imgStream = spriteData.img.pipe(gulp.dest('./dev/img/sprite.png'));
+
+	var cssStream = spriteData.css.pipe(gulp.dest('./dev/css/icon.css'));
+
+	return merge(imgStream, cssStream);
 });
 
 gulp.task('dev', function() {
-    run('clone-lib', 'combine-css', 'combine-js', 'clone-img', 'clone-html', 'clone-css', 'clone-js', 'clone-tpl', 'sprites');
+    run('clone-lib', 'combine-css', 'combine-js', 'clone-img', 'clone-html', 'clone-css', 'clone-js');
 });
 
 gulp.task('default', ['clean-dev'], function() {
@@ -263,6 +267,25 @@ gulp.task('minify-img', function() {
 					  .pipe(gulp.dest('./dist/img/'))
 					  .pipe(rev.manifest())
 		        	  .pipe(gulp.dest('rev/img'));
+});
+
+gulp.task('remove-duplicate-img', function() {
+
+	return gulp.src(['./rev/img/rev-manifest.json'])
+	           .pipe(data(function(file) {
+	           		var content = fm(String(file.contents));
+				    file.contents = new Buffer(content.body);
+				    var obj = JSON.parse(content.body);
+
+				    for (var key in obj) {
+						if (obj.hasOwnProperty(key)) {
+					    	fs.unlinkSync('./dist/img/' + key);
+					  	}
+					}
+
+				    return content.attributes;
+	           }));
+
 });
 
 gulp.task('minify-html', function() {
