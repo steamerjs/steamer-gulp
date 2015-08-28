@@ -46,13 +46,15 @@ src
 
 ## 文件cdn
 
-*script cdn
+* script cdn
+
 <script src="___cdnJs/lib/powder.js?___inline"></script>
 
-*css cdn
+* css cdn
+
 <link rel="stylesheet" href="___cdnCss/css/all.css">
 
-*img cdn
+* img cdn
 
 ```
 .icon2{
@@ -61,7 +63,7 @@ src
 }
 ```
 
-*default cdn
+* default cdn
 ___cdn
 
 
