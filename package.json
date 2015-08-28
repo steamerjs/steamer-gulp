@@ -28,7 +28,8 @@
     "gulp-concat": "^2.6.0",
     "gulp.spritesmith": "^4.0.0",
     "gulp-data": "^1.2.0",
-    "front-matter": "^1.0.0"
+    "front-matter": "^1.0.0",
+    "gulp-zip": "^3.0.2"
   },
   "engines": {
     "node": ">=0.12.0",

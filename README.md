@@ -8,7 +8,7 @@
 * 代码内联
 * cdn地址
 * 合图
-* 离线包 // todo
+* 离线包
 * 基本打点 // todo
 * 数据上报代码片段 // todo
 
@@ -36,4 +36,36 @@ src
    —— tpl -- 模版文件  // Todo
       —— common -- 公共模版
       —— index -- index页面模版
+```
+
+# 用法
+
+## 文件内联
+<script src="/lib/powder.js?___inline"></script>
+<link rel="stylesheet" href="/css/all.css?___inline">
+
+## 文件cdn
+
+*script cdn
+<script src="___cdnJs/lib/powder.js?___inline"></script>
+
+*css cdn
+<link rel="stylesheet" href="___cdnCss/css/all.css">
+
+*img cdn
+
+```
+.icon2{
+
+    background: url(___cdnImg/img/con2.png) no-repeat 50% 0%;
+}
+```
+
+*default cdn
+___cdn
+
+
+## 在css文件中加入另一个css文件内容
+```
+@import url('./src/css/index.css');
 ```
