@@ -104,9 +104,10 @@ var $ = require('zepto');
 将html作为模板字符串打包
 ```
 var tpl = require('html!../../tpl/_index.html');
+```
 
 ## 配置文件(./steamer/config.js)
-可配置项
+可配置项如下：
 * 基础url
 * cdn路径
 * 文件源及终点
