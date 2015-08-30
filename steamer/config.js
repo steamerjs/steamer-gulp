@@ -1,19 +1,23 @@
 'use strict';
 
 module.exports = {
-    root: 'http://qinfo.clt.qq.com/qlevel',
+	// 基础url
+    root: 'http://qq.com',
+    // cdn路径
     cdn: {
-    	default: 'http://s2.url.cn/qqun/qinfo/qlevel',
-    	js: 'http://s2.url.cn/qqun/qinfo/qlevel',
-    	css: 'http://s2.url.cn/qqun/qinfo/qlevel',
-    	img: 'http://s2.url.cn/qqun/qinfo/qlevel'
+    	default: 'http://s.url.cn/steamer/',
+    	js: 'http://s1.url.cn/steamer/',
+    	css: 'http://s2.url.cn/steamer/',
+    	img: 'http://s3.url.cn/steamer/'
     },
+    // 基准文件夹路径
     filePath: {
 		src: './src/',
 		dev: './dev/',
 		dist: './dist/',
 		tmp: './tmp/'
 	},
+	// 文件类型路径
 	typePath: {
 		css: 'css/',
 		js: 'js/',
@@ -23,6 +27,7 @@ module.exports = {
 		spritesImg: 'img/sprites/',
 		spritesCss: 'css/sprites/'
 	},
+	// 字符串匹配，用于各类特殊字符串替换，如cdn，时间戳，内联等
 	regex: {
 		cdnCss: /\_\_\_(cdnCss)/g,
 		cdnJs: /\_\_\_(cdnJs)/g,
@@ -35,6 +40,7 @@ module.exports = {
 		scriptInline: /<script.*src=[\"|\']*(.+)\?\_\_\_inline.*?<\/script>/ig,
 		linkInline: /<link.*href=[\"|\']*(.+)\?\_\_\_inline.*?>/ig,
 	},
+	// webpack 配置
 	webpack: {
 		output: {
 	        // filename: '[name].js'

@@ -104,4 +104,13 @@ var $ = require('zepto');
 将html作为模板字符串打包
 ```
 var tpl = require('html!../../tpl/_index.html');
-```
+
+## 配置文件(./steamer/config.js)
+可配置项
+* 基础url
+* cdn路径
+* 文件源及终点
+* 基准文件夹路径（如src, dev, dist等)
+* 文件类型路径 (如js, css等)
+* 字符串匹配，用于各类特殊字符串替换，如cdn，时间戳，内联等
+* webpack配置
