@@ -41,18 +41,22 @@ src
 # 用法
 
 ## 文件内联
+```
 <script src="/lib/powder.js?___inline"></script>
 <link rel="stylesheet" href="/css/all.css?___inline">
+```
 
 ## 文件cdn
 
 * script cdn
-
+```
 <script src="___cdnJs/lib/powder.js?___inline"></script>
+```
 
 * css cdn
-
+```
 <link rel="stylesheet" href="___cdnCss/css/all.css">
+```
 
 * img cdn
 
@@ -64,7 +68,9 @@ src
 ```
 
 * default cdn
+```
 ___cdn
+```
 
 
 ## 在css文件中加入另一个css文件内容
