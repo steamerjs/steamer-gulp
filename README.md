@@ -106,7 +106,7 @@ var $ = require('zepto');
 var tpl = require('html!../../tpl/_index.html');
 ```
 
-## 配置文件(./steamer/config.js)
+# 配置文件(./steamer/config.js)
 可配置项如下：
 * 基础url
 * cdn路径
