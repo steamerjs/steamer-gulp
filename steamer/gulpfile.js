@@ -4,6 +4,10 @@ var fs = require('fs');
 var path = require('path');
 var gulp = require('gulp');
 
+// gulp if 条件
+var gulpif = require('gulp-if');
+// 文件重命名
+var rename = require("gulp-rename");
 // 丑化压缩js
 var uglify = require('gulp-uglify');
 // 压缩html
@@ -32,6 +36,10 @@ var spriter = require('gulp.spritesmith');
 // 压缩
 var zip = require('gulp-zip');
 
+// 实时刷新
+var livereload = require('gulp-livereload');
+livereload({ start: true });
+
 var config = require('./config');
 
 var util = require('./util');
@@ -50,6 +58,8 @@ var typePath = config.typePath;
 
 var regex = config.regex;
 
+var webpackConfig = config.webpack;
+
 // 清理dev文件夹
 gulp.task('clean-dev', function() {
     return gulp.src([filePath.dev], {read: false})
@@ -63,7 +73,6 @@ gulp.task('clone-lib', function() {
 
 gulp.task('sprites', function() {
 	util.walk('./src/img/sprites/', function(filename, res) {
-
 		if (!res.length) {
 			return;
 		}
@@ -96,7 +105,8 @@ gulp.task('clone-html', function() {
         	   .pipe(util.replace(regex.cdn, urlCdn.default))
         	   .pipe(util.replace(regex.web, urlWeb))
         	   .pipe(util.replace(regex.timeline, timeline))
-			   .pipe(gulp.dest(filePath.dev));
+			   .pipe(gulp.dest(filePath.dev))
+			   .pipe(livereload());
 });
 
 gulp.task('clone-css', function() {
@@ -107,7 +117,8 @@ gulp.task('clone-css', function() {
 				.pipe(util.replace(regex.cdnImg, urlCdn.img))
 				.pipe(util.replace(regex.web, urlWeb))
         	    .pipe(util.replace(regex.timeline, timeline))
-			    .pipe(gulp.dest(filePath.dev + typePath.css));
+			    .pipe(gulp.dest(filePath.dev + typePath.css))
+			    .pipe(livereload());
 });
 
 gulp.task('combine-css', function() {
@@ -125,15 +136,25 @@ gulp.task('combine-css', function() {
 gulp.task('clone-js', function() {
 	return gulp.src([filePath.src + typePath.js + '*.js'])
 	           .pipe(util.replace(regex.cdnJs, urlCdn.js))
-			   .pipe(gulp.dest(filePath.dev + typePath.js));
+			   .pipe(gulp.dest(filePath.dev + typePath.js))
+			   .pipe(livereload());
 });
 
 gulp.task('combine-js', function() {
-	util.walk('./src/js/', function(filename, res) {
-        return  gulp.src(res)   
-			        .pipe(concat(filename + '.js'))
-			        .pipe(util.replace(regex.cdnJs, urlCdn.js))
-			        .pipe(gulp.dest(filePath.dev + typePath.js));
+	util.walk('./src/js/', function(filename, res, isConcat) {
+
+		if (isConcat) {
+	        return  gulp.src(res)   
+				        .pipe(concat(filename + '.js'))
+				        .pipe(util.replace(regex.cdnJs, urlCdn.js))
+				        .pipe(gulp.dest(filePath.dev + typePath.js));
+		}
+		else {
+			return gulp.src(filePath.src + typePath.js + filename + '/main.js')
+					   .pipe(webpack(webpackConfig))
+					   .pipe(rename(typePath.js + filename.replace('_', '') + '.js'))
+					   .pipe(gulp.dest(filePath.dev))
+		}
     }, 0);
 });
 
@@ -143,6 +164,7 @@ gulp.task('dev', function() {
 
 gulp.task('default', ['clean-dev'], function() {
 	run('dev');
+	livereload.listen();
     gulp.watch(['src/**/*'], ['dev']);
 });
 

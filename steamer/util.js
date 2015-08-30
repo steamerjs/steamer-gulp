@@ -9,29 +9,48 @@ var Util = (function() {
 		return path.replace(/\\/g, '/');
 	};
 
+	var _checkUnderScoreName = function(folderPath) {
+
+		var arr = folderPath.split('/'),
+			len  = arr.length;
+		console.log(folderPath.split('/')[len - 2].indexOf('_') === 0);
+		// console.log(folderPath[len - 1], folderPath[len - 1].indexOf('_') === 0);
+		return folderPath[len - 2].indexOf('_') === 0;
+
+	};
+
 	// 遍历深度为depth的文件夹内文件
 	var walk = function(folder, callback, depth) {
-		var files = fs.readdirSync(folder);
-	    var res = [];
-	    var folderPath = pathFix(folder);
+		if (!fs.existsSync(folder)){
+			return false;
+		}
+		var files = fs.readdirSync(folder),
+	    	res = [],
+	    	folderPath = pathFix(folder);
+
 	    folder = folderPath.split('/');
 	    folder = folder[folder.length - 2];
 
 	    files.forEach(function(file){
 
 	        var pathName = path.join(folderPath, file);
-	        
 	        // 同步获取文件信息
 	        var stat = fs.statSync(pathName)
 	        if(stat.isDirectory()) {
 	            // 迭代目录
-	            walk(pathName + '/', callback, depth + 1);
+	            if (file.indexOf('_') !== 0) {
+	            	walk(pathName + '/', callback, depth + 1);
+	            }
+	            else {
+	            	callback(file, res, false);
+	            }
 	        } else {
-	            res.push(folderPath + file);
+	        	// 条件1：避免隐藏文件； 条件2：首字符为下划线的不合并
+	            (file.indexOf('.') > 0) && (file.indexOf('_') !== 0) && res.push(folderPath + file);
 	        }
 	    });
-
-	    (depth > 0) && callback(folder, res);
+	    
+	    (depth > 0) && callback(folder, res, true);
 	};
 
 	// 换取文件后缀

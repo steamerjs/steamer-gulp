@@ -29,7 +29,10 @@
     "gulp.spritesmith": "^4.0.0",
     "gulp-data": "^1.2.0",
     "front-matter": "^1.0.0",
-    "gulp-zip": "^3.0.2"
+    "gulp-zip": "^3.0.2",
+    "gulp-livereload": "^3.8.0",
+    "gulp-rename": "^1.2.2",
+    "html-loader": "^0.3.0"
   },
   "engines": {
     "node": ">=0.12.0",

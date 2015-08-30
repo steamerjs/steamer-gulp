@@ -1,0 +1,3 @@
+function ini() {
+	console.log('!!!');
+}

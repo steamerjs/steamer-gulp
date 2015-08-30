@@ -34,5 +34,13 @@ module.exports = {
 		tpl: /tmpl:( )*"(.*)"/ig,
 		scriptInline: /<script.*src=[\"|\']*(.+)\?\_\_\_inline.*?<\/script>/ig,
 		linkInline: /<link.*href=[\"|\']*(.+)\?\_\_\_inline.*?>/ig,
+	},
+	webpack: {
+		output: {
+	        // filename: '[name].js'
+	    },
+	    loaders: [
+		  { test: /\.html/, loader: "html-loader" },
+		]
 	}
 };
