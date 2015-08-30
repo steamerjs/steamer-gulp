@@ -12,6 +12,7 @@ var rename = require("gulp-rename");
 var uglify = require('gulp-uglify');
 // 压缩html
 var minifyHTML = require('gulp-minify-html');
+var minify = require('html-minifier').minify;
 // 压缩css
 var minifycss = require('gulp-minify-css');
 // 压缩图片
@@ -142,11 +143,21 @@ gulp.task('clone-js', function() {
 
 gulp.task('combine-js', function() {
 	util.walk('./src/js/', function(filename, res, isConcat) {
-
 		if (isConcat) {
 	        return  gulp.src(res)   
 				        .pipe(concat(filename + '.js'))
 				        .pipe(util.replace(regex.cdnJs, urlCdn.js))
+				        .pipe(util.replace(regex.tpl, function(a) {
+				        	var b = a.replace(/tmpl:.*\((\"|\')/ig, '')
+				        				 .replace(/(\"|\')\)/ig, '')
+				        				 .replace(/(\.\.\/)*/ig, '');
+				            var b = 'src/' + b;
+
+				            if (!fs.existsSync(b)) {
+				                return '';
+				            }
+				            return minify("'" + fs.readFileSync(b) + "'", {collapseWhitespace: true});
+				        }))
 				        .pipe(gulp.dest(filePath.dev + typePath.js));
 		}
 		else {

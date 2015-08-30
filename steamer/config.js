@@ -36,7 +36,10 @@ module.exports = {
 		web: /\_\_\_(web)/g,
 		timeline: /\_\_\_(timeline)/g,
 		import: /@import url\('(.+?\.css)'\);*/ig,
-		tpl: /tmpl:( )*"(.*)"/ig,
+		// tpl: /tmpl:\((\"|\')*.*(\"|')\);/ig,
+		// tmpl:("|')(\w)*.html("|')
+		tpl: /tmpl:.*( )*(\"|\')(.*)(\"|\')\)/ig,
+		// tpl: /tmpl:.*\((\"|\')*.*(\"|')\)/ig,
 		scriptInline: /<script.*src=[\"|\']*(.+)\?\_\_\_inline.*?<\/script>/ig,
 		linkInline: /<link.*href=[\"|\']*(.+)\?\_\_\_inline.*?>/ig,
 	},

@@ -87,6 +87,11 @@ src
 ___cdn
 ```
 
+## 将html作为模板字符串打包
+```
+var detailTpl = tmpl:('../../tpl/detail.html');
+```
+
 
 ## 在css文件中加入另一个css文件内容，开头带下划线的文件不支持，如_index_inline.css
 ```
