@@ -54,6 +54,12 @@ src
 <link rel="stylesheet" href="/css/all.css?___inline">
 ```
 
+## 静态资源时间戳
+```
+<script src="/lib/powder.js?___timeline"></script>
+<link rel="stylesheet" href="/css/all.css?___timeline">
+```
+
 ## 文件cdn
 
 * script cdn
