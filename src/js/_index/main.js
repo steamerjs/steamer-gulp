@@ -1,7 +1,13 @@
-var plugin = require('./plugin');
-var man = require('./man');
-var $ = require('../../lib/zepto.min');
+// import boostrap from 'bootstrap';
+import React from "react";
+import Hello from './man';
+
+main();
+
+function main() {
+    React.render(<Hello />, document.getElementById('app'));
+}
 
 var _index = require('html!../../tpl/_index.html');
 
-document.body.innerHTML = _index;
+// document.body.innerHTML = '!!!';

@@ -1,3 +1,5 @@
+import bootstrap from "bootstrap";
+
 function plugin() {
 	console.log('plugin');
 }

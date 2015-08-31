@@ -45,11 +45,37 @@ module.exports = {
 	},
 	// webpack 配置
 	webpack: {
-		output: {
-	        // filename: '[name].js'
+		//插件项
+	    // plugins: [new HtmlWebpackPlugin()],
+	    //页面入口文件配置
+	    entry: {
+	        index : ['./src/js/_index/main.js']
 	    },
-	    loaders: [
-		  { test: /\.html/, loader: "html-loader" },
-		]
+	    //入口文件输出配置
+	    output: {
+	        path: './dev/js/',
+	        filename: '[name].js'
+	    },
+	    module: {
+	        //加载器配置
+	        loaders: [
+	            // { test: /\.css$/, loader: 'style-loader!css-loader' },
+	            // { test: /\.js$/, loader: 'jsx-loader?harmony' },
+	            // { test: /\.scss$/, loader: 'style!css!sass?sourceMap'},
+	            // { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'}
+	            {
+	                test: /\.js$/,
+	                loader: 'babel-loader'
+	            }, 
+	            {
+	                test: /\.jsx$/,
+	                loader: 'babel-loader!jsx-loader?harmony'
+	            }
+	        ]
+	    },
+	    //其它解决方案配置
+	    resolve: {
+	        extensions: ["", ".js", ".jsx", '.es6'],
+	    }
 	}
 };
