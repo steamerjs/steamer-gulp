@@ -53,7 +53,7 @@ module.exports = {
 	    },
 	    //入口文件输出配置
 	    output: {
-	        path: './dev/js/',
+	        // path: './dev/js/',
 	        filename: '[name].js'
 	    },
 	    module: {

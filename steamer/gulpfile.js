@@ -22,8 +22,8 @@ var imagemin = require('gulp-imagemin');
 var rev = require('gulp-rev');
 var revCollector = require('gulp-rev-collector');
 
-// var webpack = require('webpack-stream');
-var webpack = require('webpack');
+var webpack = require('webpack-stream');
+// var webpack = require('webpack');
 // 使gulp任务串行
 var run = require('run-sequence');
 // 文字替换
@@ -143,7 +143,7 @@ gulp.task('clone-js', function() {
 			   .pipe(livereload());
 });
 
-gulp.task('combine-js', function(callback) {
+gulp.task('combine-js', function() {
 	util.walk('./src/js/', function(filename, res, isConcat) {
 		if (isConcat) {
 	        return  gulp.src(res)   
@@ -165,17 +165,14 @@ gulp.task('combine-js', function(callback) {
 		else {
 			var folderPath = filePath.src + typePath.js + filename;
 			var mainJsPath = '/main.js';
-			
+
 			webpackConfig.entry.index[0] = folderPath + mainJsPath;
-			webpackConfig.output.path =  filePath.dev + typePath.js;
 			webpackConfig.output.filename = filename.replace('_', '') + '.js';
-			
-			// console.log(webpackConfig);
-			webpack(webpackConfig, function(err, stats) {
-				// console.log(err);
-				if(err) throw new gutil.PluginError("webpack", err);
-		        callback();
-		    });
+
+			return gulp.src(folderPath + mainJsPath)
+					   .pipe(webpack(webpackConfig))
+					   .pipe(rename(typePath.js + filename.replace('_', '') + '.js'))
+					   .pipe(gulp.dest(filePath.dev))
 		}
     }, 0);
 });
