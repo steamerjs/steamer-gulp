@@ -42,9 +42,9 @@ var zip = require('gulp-zip');
 // 实时刷新
 var livereload = require('gulp-livereload');
 livereload({ start: true });
-
+// 配置文件
 var config = require('./config');
-
+// 公共方法库
 var util = require('./util');
 
 // 代码中使用：___cdn 替换cdn路径
@@ -54,13 +54,13 @@ var urlCdn = config.cdn;
 var urlWeb = config.root;
 // 时间戳
 var timeline = new Date().getTime();
-
+// src, dev dist, pack文件夹位置
 var filePath = config.filePath;
-
+// js, css, img等文件夹位置
 var typePath = config.typePath;
-
+// 常用regex
 var regex = config.regex;
-
+// webpack配置
 var webpackConfig = config.webpack;
 
 // 清理dev文件夹
@@ -68,12 +68,12 @@ gulp.task('clean-dev', function() {
     return gulp.src([filePath.dev], {read: false})
                .pipe(clean());
 });
-
+// 直接复制lib文件
 gulp.task('clone-lib', function() {
 	return gulp.src([filePath.src + typePath.lib + '**/*'])
 		       .pipe(gulp.dest(filePath.dev + typePath.lib));
 });
-
+// 合图
 gulp.task('sprites', function() {
 	util.walk('./src/img/sprites/', function(filename, res) {
 		if (!res.length) {
@@ -84,22 +84,22 @@ gulp.task('sprites', function() {
 			imgName: filename + '.png',
 		    cssName: filename + '.css'
 		}));
-		
+		// 合图同时生成合图图片和css样式		
 		var imgStream = spriteData.img.pipe(gulp.dest(filePath.dev + typePath.img));
 
 		var cssStream = spriteData.css.pipe(gulp.dest(filePath.src + typePath.spritesCss));
-
+                // 将多个流合并起来再return，才符合gulp的使用，通知下个任务可以开始
 		return merge(imgStream, cssStream);
     }, 1);
 });
-
+// 复制图片，合图图片源被排除，防止文件重复
 gulp.task('clone-img', function() {
 	return gulp.src([filePath.src + typePath.img + '**/*', 
 					 '!' + filePath.src + typePath.spritesImg + '**/*',
 					 '!' + filePath.src + typePath.spritesImg])
 			   .pipe(gulp.dest(filePath.dev + typePath.img));
 });
-
+// 复制html文件，同时对静态资源做cdn路径替换
 gulp.task('clone-html', function() {
 	return gulp.src([filePath.src + '*.html'])
 	           .pipe(util.replace(regex.cdnCss, urlCdn.css))
@@ -111,7 +111,7 @@ gulp.task('clone-html', function() {
 			   .pipe(gulp.dest(filePath.dev))
 			   .pipe(livereload());
 });
-
+// 复制css，允许import其它css，并排除合图样式
 gulp.task('clone-css', function() {
 	return  gulp.src([filePath.src + typePath.css + '*.css',
 					 '!' + filePath.src + typePath.spritesCss + '**/*',
@@ -123,7 +123,7 @@ gulp.task('clone-css', function() {
 			    .pipe(gulp.dest(filePath.dev + typePath.css))
 			    .pipe(livereload());
 });
-
+// 合并css
 gulp.task('combine-css', function() {
 	util.walk('./src/css/', function(filename, res) {
         return  gulp.src(res)   
@@ -135,14 +135,14 @@ gulp.task('combine-css', function() {
 			        .pipe(gulp.dest(filePath.dev + typePath.css));
     }, 0);
 });
-
+// 复制js
 gulp.task('clone-js', function() {
 	return gulp.src([filePath.src + typePath.js + '*.js'])
 	           .pipe(util.replace(regex.cdnJs, urlCdn.js))
 			   .pipe(gulp.dest(filePath.dev + typePath.js))
 			   .pipe(livereload());
 });
-
+// 合并js及js使用webpack打包，此处分两种情况，没有underscore开头的文件夹，直接合并，否则用webpack打包
 gulp.task('combine-js', function() {
 	util.walk('./src/js/', function(filename, res, isConcat) {
 		if (isConcat) {
@@ -176,11 +176,11 @@ gulp.task('combine-js', function() {
 		}
     }, 0);
 });
-
+// dev的任务
 gulp.task('dev', function() {
     run('clone-lib', 'combine-css', 'combine-js', 'sprites', 'clone-img', 'clone-html', 'clone-css', 'clone-js');
 });
-
+// dev任务开启及watch,提供livereload进行实时刷新
 gulp.task('default', ['clean-dev'], function() {
 	run('dev');
 	livereload.listen();
@@ -198,7 +198,7 @@ gulp.task('clean-dist', function() {
     return gulp.src([filePath.dist], {read: false})
                .pipe(clean());
 });
-
+// 压缩css并使用rev和revCollector进行css文件内图片md5改名
 gulp.task('minify-css', function() {
     return gulp.src(['rev/img/*.json', './dev/css/**/*'])
     			.pipe(revCollector({
@@ -216,7 +216,7 @@ gulp.task('minify-css', function() {
         	   .pipe(gulp.dest('rev/css'));
 });
 
-
+// css文件md5化
 gulp.task('md5-css', function() {
     return gulp.src(['rev/css/*.json', 'rev/img/*.json', './dist/css/**/*'])
 	           .pipe(revCollector({
@@ -229,7 +229,7 @@ gulp.task('md5-css', function() {
 		        }))
 			   .pipe(gulp.dest('./dist/css/'))
 });
-
+// 压缩js
 gulp.task('minify-js', function() {
     return gulp.src(['./dev/js/**/*'])
 	           .pipe(uglify())
@@ -238,7 +238,7 @@ gulp.task('minify-js', function() {
 			   .pipe(rev.manifest())
         	   .pipe(gulp.dest('rev/js'));
 });
-
+js文件md5化
 gulp.task('md5-js', function() {
     return gulp.src(['rev/js/*.json', 'rev/css/*.json', 'rev/img/*.json', './dist/js/**/*'])
 	           .pipe(revCollector({
@@ -251,7 +251,7 @@ gulp.task('md5-js', function() {
 		        }))
 			   .pipe(gulp.dest('./dist/js/'))
 });
-
+// 压缩html文件并对html内资源名md5改名
 gulp.task('minify-html', function() {
     return gulp.src(['rev/**/*.json', './dev/*.html'])
     			.pipe(revCollector({
@@ -279,21 +279,21 @@ gulp.task('minify-html', function() {
 	           .pipe(minifyHTML())
 			   .pipe(gulp.dest('./dist/'));
 });
-
+// 复制lib
 gulp.task('copy-lib', function() {
     return gulp.src(['./dev/lib/**/*'])
 			   .pipe(gulp.dest('./dist/lib/'));
 });
-
+// 清除md5辅助文件
 gulp.task('clean-rev', function() {
     return gulp.src(['./rev/'], {read: false})
                .pipe(clean());
 });
-
+// dist任务流程
 gulp.task('dist', ['clean-dist'], function() {
 	run('copy-lib', 'minify-css', 'md5-css', 'minify-js', 'md5-js', 'minify-html', 'clean-rev');
 });
-
+// 压缩图片
 gulp.task('min-img', function() {
 
     return gulp.src(['./dev/img/**/*'])
