@@ -1,3 +1,7 @@
+# 使用
+* 开发模式: gulp
+* 生成dist发布文件: gulp dist
+* 生成离线包: gulp pack
 
 # 功能
 
