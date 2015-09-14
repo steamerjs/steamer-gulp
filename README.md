@@ -134,5 +134,3 @@ https://github.com/lcxfs1991/gulp-bigpipe-template
 
 # Changelog
 * 1.1.0 基本功能可使用
-=======
->>>>>>> b8c5dfa4a5ce096bcf9d24bae70350c4a55ddd9f
