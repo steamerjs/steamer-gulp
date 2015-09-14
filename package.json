@@ -1,6 +1,6 @@
 {
   "name": "steamer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "authored by heyli",
   "keywords": [
     "powder",
@@ -39,7 +39,9 @@
     "merge-stream": "^0.1.8",
     "react-hot-loader": "^1.3.0",
     "run-sequence": "^1.1.1",
-    "webpack-stream": "^2.1.0"
+    "webpack-stream": "^2.1.0",
+    "gulp-bigpipe-template": "^1.0.4",
+    "gulp-inline-res": "^0.1.0"
   },
   "engines": {
     "node": ">=0.12.0",

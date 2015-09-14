@@ -38,6 +38,10 @@ var merge = require('merge-stream');
 var spriter = require('gulp.spritesmith');
 // 压缩
 var zip = require('gulp-zip');
+// bigpipe 模版
+var bgTpl = require('gulp-bigpipe-template');
+
+var inline = require('gulp-inline-res');
 
 // 实时刷新
 var livereload = require('gulp-livereload');
@@ -62,6 +66,11 @@ var typePath = config.typePath;
 var regex = config.regex;
 
 var webpackConfig = config.webpack;
+
+var isBigPipeSupported = config.isBigPipeSupported;
+var bigPipeTplConfig = config.bigPipeTplConfig;
+
+var isImageMinSupported = config.isImageMinSupported;
 
 // 清理dev文件夹
 gulp.task('clean-dev', function() {
@@ -149,17 +158,18 @@ gulp.task('combine-js', function() {
 	        return  gulp.src(res)   
 				        .pipe(concat(filename + '.js'))
 				        .pipe(util.replace(regex.cdnJs, urlCdn.js))
-				        .pipe(util.replace(regex.tpl, function(a) {
-				        	var b = a.replace(/tmpl:.*\((\"|\')/ig, '')
-				        				 .replace(/(\"|\')\)/ig, '')
-				        				 .replace(/(\.\.\/)*/ig, '');
-				            var b = 'src/' + b;
+				        .pipe(inline())
+				        // .pipe(util.replace(regex.tpl, function(a) {
+				        // 	var b = a.replace(/tmpl:.*\((\"|\')/ig, '')
+				        // 				 .replace(/(\"|\')\)/ig, '')
+				        // 				 .replace(/(\.\.\/)*/ig, '');
+				        //     var b = 'src/' + b;
 
-				            if (!fs.existsSync(b)) {
-				                return '';
-				            }
-				            return minify("'" + fs.readFileSync(b) + "'", {collapseWhitespace: true});
-				        }))
+				        //     if (!fs.existsSync(b)) {
+				        //         return '';
+				        //     }
+				        //     return minify("'" + fs.readFileSync(b) + "'", {collapseWhitespace: true});
+				        // }))
 				        .pipe(gulp.dest(filePath.dev + typePath.js));
 		}
 		else {
@@ -262,22 +272,24 @@ gulp.task('minify-html', function() {
 		                'img/': 'img/',
 		            }
 		        }))
-		        .pipe(util.replace(regex.scriptInline, function(a, b) {
-		            b = 'dist/' + b;
-		            if (!fs.existsSync(b)) {
-		                return '';
-		            }
-		            return '<script>' + fs.readFileSync(b) + '</script>';
-		        }))
-		        .pipe(util.replace(regex.linkInline, function(a,b) {
-		            b = 'dist/' + b;
-		            if (!fs.existsSync(b)) {
-		                return '';
-		            }
-		            return '<style type="text/css">'+fs.readFileSync(b)+'</style>';
-		        }))
-	           .pipe(minifyHTML())
-			   .pipe(gulp.dest('./dist/'));
+		        .pipe(inline())
+		        // .pipe(util.replace(regex.scriptInline, function(a, b) {
+		        //     b = 'dist/' + b;
+		        //     if (!fs.existsSync(b)) {
+		        //         return '';
+		        //     }
+		        //     return '<script>' + fs.readFileSync(b) + '</script>';
+		        // }))
+		        // .pipe(util.replace(regex.linkInline, function(a,b) {
+		        //     b = 'dist/' + b;
+		        //     if (!fs.existsSync(b)) {
+		        //         return '';
+		        //     }
+		        //     return '<style type="text/css">'+fs.readFileSync(b)+'</style>';
+		        // }))
+		        .pipe(gulpif(isBigPipeSupported, bgTpl(bigPipeTplConfig)))
+	            .pipe(minifyHTML())
+			    .pipe(gulp.dest('./dist/'));
 });
 
 gulp.task('copy-lib', function() {
@@ -297,7 +309,7 @@ gulp.task('dist', ['clean-dist'], function() {
 gulp.task('min-img', function() {
 
     return gulp.src(['./dev/img/**/*'])
-			          // .pipe(imagemin())
+			          .pipe(gulpif(isImageMinSupported, imagemin()))
 			          .pipe(rev())
 					  .pipe(gulp.dest('./dist/img/'))
 					  .pipe(rev.manifest())
@@ -357,5 +369,5 @@ gulp.task('offline', function() {
 })
 
 gulp.task('pack', function() {
-    run('cleanPack', 'offline', 'zip');    
+    run('cleanPack', 'offline', 'zip');   
 });

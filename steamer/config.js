@@ -77,5 +77,15 @@ module.exports = {
 	    resolve: {
 	        extensions: ["", ".js", ".jsx", '.es6'],
 	    }
-	}
+	},
+	// 是否支持bigpipe模版分割
+	isBigPipeSupported: true,
+	bigPipeTplConfig: {
+		// tplFolder: "server/tpl/",
+		tplFileExt: 'js',
+		quoteChar: '"',
+		indentString: "    "
+	},
+	// 是否支持图片压缩
+	isImageMinSupported: false,
 };

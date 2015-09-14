@@ -3,6 +3,7 @@
 
 * 文件复制
 * 文件压缩
+* 图片压缩
 * 文件md5
 * 文件合并
 * webpack打包及es6特性
@@ -11,6 +12,7 @@
 * 合图
 * 实时刷新
 * 离线包
+* bigpipe模版分割
 * 基本打点 // todo
 * 数据上报代码片段 // todo
 * 自动化测试 // todo
@@ -54,7 +56,14 @@ src
 ```
 <script src="/lib/powder.js?___inline"></script>
 <link rel="stylesheet" href="/css/all.css?___inline">
+<tpl src="src/tpl/detail.html?___inline"></tpl>
 ```
+在js文件中用html模版，可以这样写:
+```
+var detailTpl = "<tpl src="src/tpl/detail.html?___inline"></tpl>"
+```
+具体可以参考https://github.com/lcxfs1991/gulp-inline-src
+
 
 ## 静态资源时间戳
 ```
@@ -88,11 +97,6 @@ src
 ___cdn
 ```
 
-## 将html作为模板字符串打包
-```
-var detailTpl = tmpl:('../../tpl/detail.html');
-```
-
 
 ## 在css文件中加入另一个css文件内容，开头带下划线的文件不支持，如_index_inline.css
 ```
@@ -107,10 +111,9 @@ var detailTpl = tmpl:('../../tpl/detail.html');
 var $ = require('zepto');
 ```
 
-将html作为模板字符串打包
-```
-var tpl = require('html!../../tpl/_index.html');
-```
+## bigpipe模版支持
+具体配置和用法请参考
+https://github.com/lcxfs1991/gulp-bigpipe-template
 
 # 配置文件(./steamer/config.js)
 可配置项如下：
@@ -121,3 +124,8 @@ var tpl = require('html!../../tpl/_index.html');
 * 文件类型路径 (如js, css等)
 * 字符串匹配，用于各类特殊字符串替换，如cdn，时间戳，内联等
 * webpack配置
+* 是否支持bigpipe模板
+* 是否支持图片压缩
+
+# Changelog
+* 1.1.0 基本功能可使用
