@@ -369,10 +369,5 @@ gulp.task('offline', function() {
 })
 
 gulp.task('pack', function() {
-<<<<<<< HEAD
     run('cleanPack', 'offline', 'zip');   
 });
-=======
-    run('cleanPack', 'offline', 'zip');    
-});
->>>>>>> b8c5dfa4a5ce096bcf9d24bae70350c4a55ddd9f
