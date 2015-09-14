@@ -1,3 +1,7 @@
+# 使用
+* 开发模式: gulp
+* 生成dist发布文件: gulp dist
+* 生成离线包: gulp pack
 
 # 功能
 
@@ -124,8 +128,11 @@ https://github.com/lcxfs1991/gulp-bigpipe-template
 * 文件类型路径 (如js, css等)
 * 字符串匹配，用于各类特殊字符串替换，如cdn，时间戳，内联等
 * webpack配置
+<<<<<<< HEAD
 * 是否支持bigpipe模板
 * 是否支持图片压缩
 
 # Changelog
 * 1.1.0 基本功能可使用
+=======
+>>>>>>> b8c5dfa4a5ce096bcf9d24bae70350c4a55ddd9f
