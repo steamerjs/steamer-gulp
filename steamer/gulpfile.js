@@ -151,6 +151,11 @@ gulp.task('clone-js', function() {
 			   .pipe(gulp.dest(filePath.dev + typePath.js))
 			   .pipe(livereload());
 });
+
+var setWebpackEntry = function(entry, output) {
+	webpackConfig.entry['js/' + output] =  entry;
+};
+
 // 合并js及js使用webpack打包，此处分两种情况，没有underscore开头的文件夹，直接合并，否则用webpack打包
 gulp.task('combine-js', function() {
 	util.walk('./src/js/', function(filename, res, isConcat) {
@@ -176,19 +181,29 @@ gulp.task('combine-js', function() {
 			var folderPath = filePath.src + typePath.js + filename;
 			var mainJsPath = '/main.js';
 
-			webpackConfig.entry.index[0] = folderPath + mainJsPath;
-			webpackConfig.output.filename = filename.replace('_', '') + '.js';
+			setWebpackEntry(folderPath + mainJsPath, filename.replace('_', ''));
+			// webpackConfig.entry.index[0] = folderPath + mainJsPath;
+			// webpackConfig.output.filename = filename.replace('_', '') + '.js';
 
-			return gulp.src(folderPath + mainJsPath)
-					   .pipe(webpack(webpackConfig))
-					   .pipe(rename(typePath.js + filename.replace('_', '') + '.js'))
-					   .pipe(gulp.dest(filePath.dev))
+			// return gulp.src(folderPath + mainJsPath)
+			// 		   .pipe(webpack(webpackConfig))
+			// 		   .pipe(rename(typePath.js + filename.replace('_', '') + '.js'))
+			// 		   .pipe(gulp.dest(filePath.dev))
 		}
     }, 0);
 });
+
+gulp.task('webpack', function() {
+	console.log(webpackConfig);
+	return gulp.src('./src/js/**/*.js')
+					   .pipe(webpack(webpackConfig))
+					   // .pipe(rename(typePath.js + filename.replace('_', '') + '.js'))
+					   .pipe(gulp.dest(filePath.dev))
+});
+
 // dev的任务
 gulp.task('dev', function() {
-    run('clone-lib', 'combine-css', 'combine-js', 'sprites', 'clone-img', 'clone-html', 'clone-css', 'clone-js');
+    run('clone-lib', 'combine-css', 'combine-js', 'webpack', 'sprites', 'clone-img', 'clone-html', 'clone-css', 'clone-js');
 });
 // dev任务开启及watch,提供livereload进行实时刷新
 gulp.task('default', ['clean-dev'], function() {
@@ -248,7 +263,7 @@ gulp.task('minify-js', function() {
 			   .pipe(rev.manifest())
         	   .pipe(gulp.dest('rev/js'));
 });
-js文件md5化
+// js文件md5化
 gulp.task('md5-js', function() {
     return gulp.src(['rev/js/*.json', 'rev/css/*.json', 'rev/img/*.json', './dist/js/**/*'])
 	           .pipe(revCollector({
