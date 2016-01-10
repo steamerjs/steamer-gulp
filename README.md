@@ -5,7 +5,7 @@ Webpack for Development and Gulp&Webpack for Production
 ## src结构例子
 ```
 --src
-|
+ |
 ----css 
  |
  |-common.scss
@@ -43,7 +43,8 @@ Webpack for Development and Gulp&Webpack for Production
  |-fontawesome
  |
  |
-*.html
+index.html
+detail.html
 ```
 
 ## 教程
