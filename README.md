@@ -3,7 +3,7 @@
 Webpack for Development and Gulp&Webpack for Production
 
 ## src结构例子
-
+```
 --src
 |
 ----css 
@@ -44,6 +44,7 @@ Webpack for Development and Gulp&Webpack for Production
  |
  |
 *.html
+```
 
 ## 教程
 可以打开gulpfile.js以及webpack.config.js看看注释。
