@@ -128,7 +128,6 @@ https://github.com/lcxfs1991/gulp-bigpipe-template
 * 文件类型路径 (如js, css等)
 * 字符串匹配，用于各类特殊字符串替换，如cdn，时间戳，内联等
 * webpack配置
-<<<<<<< HEAD
 * 是否支持bigpipe模板
 * 是否支持图片压缩
 
